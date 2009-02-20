@@ -1,7 +1,6 @@
 externals:
     lib/LibStub:
         url: svn://svn.wowace.com/wow/libstub/mainline/tags/1.0
-        tag: latest
     lib/AceAddon-3.0:
         url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceAddon-3.0
         tag: latest

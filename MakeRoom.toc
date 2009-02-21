@@ -1,6 +1,6 @@
 ## Interface: 30000
 ## Author: Mitchell Morris
-## Title: Sample
+## Title: MakeRoom
 ## Version: 1.0
 ## Dependencies: Informant
 

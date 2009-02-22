@@ -21,6 +21,9 @@ function MakeRoom:OnInitialize()
     self:RegisterChatCommand("mr", "SlashCommand")
     self:RegisterEvent("UI_ERROR_MESSAGE")
     self:RegisterEvent("LOOT_CLOSED")
+
+    -- Allow our frame to be closed with the Escape key
+    tinsert(UISpecialFrames, "MakeRoomPanel")
 end
 
 function MakeRoom:OnEnable()

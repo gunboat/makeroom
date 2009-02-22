@@ -8,6 +8,7 @@
 	<Include file="lib\CallbackHandler-1.0\CallbackHandler-1.0.xml" />
 	<Include file="lib\AceEvent-3.0\AceEvent-3.0.xml" />
 	<Include file="lib\AceLocale-3.0\AceLocale-3.0.xml" />
+	<Include file="lib\ItemPrice-1.1\lib.xml" />
 	
 	<Script file="MakeRoom_enUS.lua"/>
 	<Script file="MakeRoom.lua"/>

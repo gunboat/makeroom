@@ -17,5 +17,5 @@ externals:
         url: svn://svn.wowace.com/wow/ace3/mainline/trunk/CallbackHandler-1.0
         tag: latest
     lib/ItemPrice-1.1:
-	url: svn://svn.wowace.com/wow/itemprice-1-1/mainline/trunk
-	tag: latest
+        url: svn://svn.wowace.com/wow/itemprice-1-1/mainline/trunk
+        tag: latest

@@ -7,6 +7,7 @@ MakeRoom = LibStub("AceAddon-3.0"):NewAddon("MakeRoom", "AceConsole-3.0", "AceEv
 local T = LibStub("AceLocale-3.0"):GetLocale("MakeRoom", false)
 local ItemPrice = LibStub("ItemPrice-1.1")
 local greyItems = {}
+local emptyItem = {texture=nil, itemLink=nil, itemLink=nil}
 
 local options = {
     name = "MakeRoom",
@@ -33,26 +34,55 @@ end
 function MakeRoom:OnDisable()
 end
 
-function MakeRoom:SlashCommand()
-    MakeRoomPanel_Directions:SetText(T["DIRECTIONS"])
+function MakeRoom:UpdateItem(slot, itemDescription)
+    getglobal("MakeRoomPanel_Item" .. slot .. "IconTexture"):SetTexture(itemDescription.texture)
+    getglobal("MakeRoomPanel_Item" .. slot .. "Text"):SetText(itemDescription.itemLink)
+    MakeRoom:SetItemCount(
+        getglobal("MakeRoomPanel_Item" .. slot .. "Count"),
+        itemDescription.itemCount)
+end
 
+function MakeRoom:SetItemCount(widget, itemCount)
+    if itemCount == 1 then
+        widget:Hide()
+    else
+        widget:SetText(itemCount)
+        widget:Show()
+    end
+end
+
+function MakeRoom:MakeRoomPanel_OnLoad(self)
+    self:RegisterEvent("LOOT_CLOSED")
+
+    MakeRoomPanel_Title:SetText(T["MAKEROOM_WINDOW_TITLE"])
+    MakeRoomPanel_DestroyAll:SetText(T["DESTROY_ALL"])
+end
+
+function MakeRoom:MakeRoomPanel_OnEvent(self, event, ...)
+    if event == "LOOT_CLOSED" then
+        HideUIPanel(self)
+        return
+    end
+end
+
+function MakeRoom:SlashCommand()
     MakeRoom:MakeRoom()
     if not MakeRoomPanel:IsVisible() then
         MakeRoomPanel:Show()
     end
 end
 
-function MakeRoom:UpdateItem(slot, itemDescription)
-    getglobal("MakeRoomPanel_Item" .. slot .. "IconTexture"):SetTexture(itemDescription.texture)
-    getglobal("MakeRoomPanel_Item" .. slot .. "Text"):SetText(itemDescription.itemLink)
-
-    local widget = getglobal("MakeRoomPanel_Item" .. slot .. "Count")
-    if itemDescription.itemCount == 1 then
-        widget:Hide()
-    else
-        widget:SetText(itemDescription.itemCount)
-        widget:Show()
+function MakeRoom:DestroyAllItems(self)
+    for i = 1, 4, 1 do
+        if i <= #greyItems and not greyItems[i].empty then
+            PickupContainerItem(greyItems[i].bag, greyItems[i].slot)
+            DeleteCursorItem()
+            greyItems[i].empty = true
+            MakeRoom:UpdateItem(i, {texture=nil, itemLink=nil, itemLink=nil})
+            GameTooltip:Hide()
+        end
     end
+    MakeRoomPanel:Hide()
 end
 
 function MakeRoom:OnClick(widget, button, ...)
@@ -75,13 +105,9 @@ function MakeRoom:OnEnter(widget)
     if i <= # greyItems and not greyItems[i].empty then
         GameTooltip:SetOwner(widget, "ANCHOR_RIGHT")
         GameTooltip:SetBagItem(greyItems[i].bag, greyItems[i].slot)
+        GameTooltip:AddLine(T["TOOLTIP_INSTRUCTIONS"])
         GameTooltip:Show()
     end
-end
-
-function MakeRoom:OnLeave(widget)
-    local i = widget:GetID()
-    GameTooltip:Hide()
 end
 
 function MakeRoom:UI_ERROR_MESSAGE(event, msg)
@@ -124,6 +150,8 @@ function MakeRoom:MakeRoom()
         for i = 1, 4, 1 do
             if greyItems[i] then
                 MakeRoom:UpdateItem(i, greyItems[i])
+            else
+                MakeRoom:UpdateItem(i, emptyItem)
             end
         end
     end

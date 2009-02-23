@@ -1,5 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\..\FrameUI\Frame.xsd">
+	xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\..\FrameUI\Frame.xsd" >
 	
 	<!-- Embeds -->
 	<Script file="lib\LibStub\LibStub.lua"/>
@@ -13,186 +13,190 @@
 	<Script file="MakeRoom_enUS.lua"/>
 	<Script file="MakeRoom.lua"/>
 	
-	<!-- Base class for the dialog frame -->
-	<Frame name="MakeRoomPanelTemplate"
-		   hidden="true" 
-		   toplevel="true" 
-		   virtual="true" 
-		   frameStrata="DIALOG" 
-		   parent="UIParent">
-		<Size>
-			<AbsDimension x="200" y="235" />
-		</Size>
-		
-		<Anchors>
-			<Anchor point="CENTER" />
-		</Anchors>
-		
-		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background"
-				  edgeFile="Interface\DialogFrame\UI-DialogBox-Border"
-				  tile="true">
-			<TileSize>
-				<AbsValue val="32" />
-			</TileSize>
-			<EdgeSize>
-				<AbsValue val="32" />
-			</EdgeSize>
-			
-			<BackgroundInsets>
-				<AbsInset left="11" right="12" top="12" bottom="11" />
-			</BackgroundInsets>
-		</Backdrop>
-	</Frame>
-	
-    <!-- Base class for item buttons -->
-	<Button name="ItemTemplate" virtual="true">
-		<Size>
-			<AbsDimension x="147" y="41" />
-		</Size>
-		<Layers>
-			<Layer level="BACKGROUND">
-				<Texture name="$parentIconTexture">
-					<Size>
-						<AbsDimension x="39" y="39"/>
-					</Size>
-					<Anchors>
-						<Anchor point="TOPLEFT">
-							<Offset>
-								<AbsDimension x="0" y="0"/>
-							</Offset>
-						</Anchor>
-					</Anchors>
-				</Texture>
-				<Texture name="$parentNameFrame" file="Interface\QuestFrame\UI-QuestItemNameFrame">
-					<Size>
-						<AbsDimension x="150" y="64"/>
-					</Size>
-					<Anchors>
-						<Anchor point="LEFT" relativeTo="$parentIconTexture" relativePoint="RIGHT">
-							<Offset>
-								<AbsDimension x="-10" y="0"/>
-							</Offset>
-						</Anchor>
-					</Anchors>
-				</Texture>
-				<FontString name="$parentText" inherits="GameFontHighlight" justifyH="LEFT">
-					<Size>
-						<AbsDimension x="90" y="36"/>
-					</Size>
-					<Anchors>
-						<Anchor point="LEFT" relativeTo="$parentNameFrame">
-							<Offset>
-								<AbsDimension x="15" y="0"/>
-							</Offset>
-						</Anchor>
-					</Anchors>
-				</FontString>
-			</Layer>
-			<Layer level="ARTWORK">
-				<FontString name="$parentCount" inherits="NumberFontNormal" justifyH="RIGHT">
-					<Anchors>
-						<Anchor point="BOTTOMRIGHT" relativeTo="$parentIconTexture">
-							<Offset>
-								<AbsDimension x="-1" y="1"/>
-							</Offset>
-						</Anchor>
-					</Anchors>
-				</FontString>
-			</Layer>
-		</Layers>
-		
-		<Scripts>
-			<OnLoad>self:RegisterForClicks("LeftButtonUp", "RightButtonUp")</OnLoad>
-			<OnClick>MakeRoom:OnClick(self, button)</OnClick>
-			<OnEnter>MakeRoom:OnEnter(self)</OnEnter>
-			<OnLeave>MakeRoom:OnLeave(self)</OnLeave>
-		</Scripts>
-	</Button>
-	
-	<Frame name="MakeRoomPanel" 
-           inherits="MakeRoomPanelTemplate" 
-           movable="true" 
-           enableMouse="true">
-		<Layers>
-			<Layer level="ARTWORK">
-				<FontString name="$parent_Directions" inherits="GameFontNormal" text="Item Name" justifyH="LEFT">
-					<Size>
-						<AbsDimension x="200" y="38" />
-					</Size>
-					<Anchors>
-						<Anchor point="TOPLEFT">
-							<Offset>
-								<AbsDimension x="14" y="0" />
-							</Offset>
-						</Anchor>
-					</Anchors>
-				</FontString>
-			</Layer>
-		</Layers>
-		
-		<Frames>
-			<Button name="$parent_CloseButton"
-                    inherits="UIPanelCloseButton">
-				<Anchors>
-					<Anchor point="TOPRIGHT">
-						<Offset>
-							<AbsDimension x="-4" y="-4" />
-						</Offset>
-					</Anchor>
-				</Anchors>
-			</Button>
-						
-			<Button name="$parent_Item1" inherits="ItemTemplate" id="1">
-				<Anchors>
-					<Anchor point="TOPLEFT"
-						    relativeTo="$parent_Directions"
-							relativePoint="BOTTOMLEFT">
-						<Offset>
-							<AbsDimension x="0" y="0" />
-						</Offset>
-					</Anchor>
-				</Anchors>
-			</Button>
-			<Button name="$parent_Item2" inherits="ItemTemplate" id="2">
-				<Anchors>
-					<Anchor point="TOPLEFT" 
-                            relativeTo="$parent_Item1" 
-                            relativePoint="BOTTOMLEFT">
-						<Offset>
-							<AbsDimension x="0" y="-7" />
-						</Offset>
-					</Anchor>
-				</Anchors>
-			</Button>
-			<Button name="$parent_Item3" inherits="ItemTemplate" id="3">
-				<Anchors>
-					<Anchor point="TOPLEFT" 
-                            relativeTo="$parent_Item2" 
-                            relativePoint="BOTTOMLEFT">
-						<Offset>
-							<AbsDimension x="0" y="-7" />
-						</Offset>
-					</Anchor>
-				</Anchors>
-			</Button>
-			<Button name="$parent_Item4" inherits="ItemTemplate" id="4">
-				<Anchors>
-					<Anchor point="TOPLEFT" 
-                            relativeTo="$parent_Item3" 
-                            relativePoint="BOTTOMLEFT">
-						<Offset>
-							<AbsDimension x="0" y="-7" />
-						</Offset>
-					</Anchor>
-				</Anchors>
-			</Button>
-		</Frames>
-		
-		<Scripts>
-			<OnMouseDown>this:StartMoving()</OnMouseDown>
-			<OnMouseUp>this:StopMovingOrSizing();</OnMouseUp>
-			<OnDragStop>this:StopMovingOrSizing();</OnDragStop>
-		</Scripts>
-	</Frame>
+        <Button name="ItemTemplate"
+                inherits="ItemButtonTemplate"
+                virtual="true">
+            <Layers>
+                <Layer level="ARTWORK">
+                    <Texture name="$parentNameFrame" file="Interface\QuestFrame\UI-QuestItemNameFrame">
+                        <Size>
+                            <AbsDimension x="130" y="62"/>
+                        </Size>
+                        <Anchors>
+                            <Anchor point="LEFT">
+                                <Offset>
+                                    <AbsDimension x="30" y="0"/>
+                                </Offset>
+                            </Anchor>
+                        </Anchors>
+                    </Texture>
+                    <FontString name="$parentText"
+                                inherits="GameFontNormal"
+                                justifyH="LEFT">
+                        <Size>
+                            <AbsDimension x="93" y="38"/>
+                        </Size>
+                        <Anchors>
+                            <Anchor point="LEFT" relativePoint="RIGHT">
+                                <Offset>
+                                    <AbsDimension x="8" y="0"/>
+                                </Offset>
+                            </Anchor>
+                        </Anchors>
+                    </FontString>
+                </Layer>
+            </Layers>
+            <Scripts>
+                <OnLoad>self:RegisterForClicks("LeftButtonUp", "RightButtonUp")</OnLoad>
+                <OnClick>MakeRoom:OnClick(self, button)</OnClick>
+                <OnEnter>MakeRoom:OnEnter(self)</OnEnter>
+                <OnLeave>GameTooltip:Hide() </OnLeave>
+            </Scripts>
+        </Button>
+
+        <Frame name="MakeRoomPanel"
+               frameStrata="HIGH"
+               toplevel="true"
+               moveable="true"
+               enableMouse="true"
+               clampedToScreen="true"
+               hidden="true"
+               parent="UIParent">
+            <Size>
+                <AbsDimension x="256" y="256"/>
+            </Size>
+            <Anchors>
+                <Anchor point="CENTER" />
+            </Anchors>
+            <TitleRegion setAllPoints="true"/>
+            <HitRectInsets>
+                <AbsInset left="0" right="70" top="0" bottom="0" />
+            </HitRectInsets>
+            <Layers>
+                <Layer level="BACKGROUND">
+                    <Texture name="MakeRoomPanelPortraitOverlay" file="Interface\TargetingFrame\TargetDead">
+                        <Size>
+                            <AbsDimension x="56" y="56"/>
+                        </Size>
+                        <Anchors>
+                            <Anchor point="TOPLEFT">
+                                <Offset>
+                                    <AbsDimension x="10" y="-8"/>
+                                </Offset>
+                            </Anchor>
+                        </Anchors>
+                    </Texture>
+                </Layer>
+                <Layer level="ARTWORK">
+                    <Texture file="Interface\LootFrame\UI-LootPanel"/>
+                    <FontString name="$parent_Title" inherits="GameFontNormal" text="ITEMS">
+                        <Anchors>
+                            <Anchor point="CENTER">
+                                <Offset>
+                                    <AbsDimension x="-12" y="102"/>
+                                </Offset>
+                            </Anchor>
+                        </Anchors>
+                    </FontString>
+                </Layer>
+            </Layers>
+            <Frames>
+                <Button name="$parent_CloseButton">
+                    <Size>
+                        <AbsDimension x="32" y="32"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="CENTER" relativePoint="TOPRIGHT">
+                            <Offset>
+                                <AbsDimension x="-81" y="-26"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                    <Scripts>
+                        <OnClick>
+                            HideUIPanel(MakeRoomPanel)
+                        </OnClick>
+                    </Scripts>
+                    <NormalTexture file="Interface\Buttons\UI-Panel-MinimizeButton-Up"/>
+                    <PushedTexture file="Interface\Buttons\UI-Panel-MinimizeButton-Down"/>
+                    <HighlightTexture file="Interface\Buttons\UI-Panel-MinimizeButton-Highlight" alphaMode="ADD"/>
+                </Button>
+                <Button name="$parent_DestroyAll"
+                        inherits="UIPanelButtonTemplate"
+                        text="DESTROY_ALL">
+                    <Size>
+                        <AbsDimension x="100" y="22" />
+                    </Size>
+                    <Anchors>
+                        <Anchor point="CENTER">
+                            <Offset>
+                                <AbsDimension x="0" y="70"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                    <Scripts>
+                        <OnClick>MakeRoom:DestroyAllItems(self)</OnClick>
+                    </Scripts>
+                </Button>
+                <Button name="$parent_Item1"
+                        inherits="ItemTemplate"
+                        id="1">
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset>
+                                <AbsDimension x="24" y="-80"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </Button>
+                <Button name="$parent_Item2"
+                        inherits="ItemTemplate"
+                        id="2">
+                    <Anchors>
+                        <Anchor point="TOP"
+                                relativeTo="$parent_Item1"
+                                relativePoint="BOTTOM">
+                            <Offset>
+                                <AbsDimension x="0" y="-4"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </Button>
+                <Button name="$parent_Item3"
+                        inherits="ItemTemplate"
+                        id="3">
+                    <Anchors>
+                        <Anchor point="TOP"
+                                relativeTo="$parent_Item2"
+                                relativePoint="BOTTOM">
+                            <Offset>
+                                <AbsDimension x="0" y="-4"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </Button>
+                <Button name="$parent_Item4"
+                        inherits="ItemTemplate"
+                        id="4">
+                    <Anchors>
+                        <Anchor point="TOP"
+                                relativeTo="$parent_Item3"
+                                relativePoint="BOTTOM">
+                            <Offset>
+                                <AbsDimension x="0" y="-4"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </Button>
+            </Frames>
+            <Scripts>
+                <OnLoad>
+                    MakeRoom:MakeRoomPanel_OnLoad(self)
+                </OnLoad>
+                <OnEvent>
+                    MakeRoom:MakeRoomPanel_OnEvent(self, event, ...)
+                </OnEvent>
+            </Scripts>
+        </Frame>
 	
 </Ui>

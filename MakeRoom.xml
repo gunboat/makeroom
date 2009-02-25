@@ -11,6 +11,8 @@
 	<Include file="lib\ItemPrice-1.1\lib.xml" />
 	
 	<Script file="MakeRoom_enUS.lua"/>
+	<Script file="MakeRoom_esMX.lua"/>
+	<Script file="MakeRoom_esES.lua"/>
 	<Script file="MakeRoom.lua"/>
 	
         <Button name="ItemTemplate"

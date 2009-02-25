@@ -1,9 +1,9 @@
 local AL3 = LibStub("AceLocale-3.0")
-local T = AL3:NewLocale("MakeRoom", "enUS", true, true)
+local L = AL3:NewLocale("MakeRoom", "enUS", true, true)
 
-T["DESTROY_ALL"] = "Destroy All"
-T["MAKEROOM_WINDOW_TITLE"] = "MakeRoom"
-T["INVENTORY_IS_FULL"] = "Inventory is full."
-T["TOOLTIP_INSTRUCTIONS"] = "shift-click to destroy"
-T["CURSOR_BUSY"] = "You're already holding something"
-T["NO_GREY_ITEMS"] = "No grey items to destroy."
+L["DESTROY_ALL"] = "Destroy All"
+L["MAKEROOM_WINDOW_TITLE"] = "MakeRoom"
+L["INVENTORY_IS_FULL"] = "Inventory is full."
+L["TOOLTIP_INSTRUCTIONS"] = "shift-click to destroy"
+L["CURSOR_BUSY"] = "You're already holding something"
+L["NO_GREY_ITEMS"] = "No grey items to destroy."

@@ -7,7 +7,7 @@ MakeRoom = LibStub("AceAddon-3.0"):NewAddon("MakeRoom", "AceConsole-3.0", "AceEv
 local T = LibStub("AceLocale-3.0"):GetLocale("MakeRoom", false)
 local ItemPrice = LibStub("ItemPrice-1.1")
 local greyItems = {}
-local emptyItem = {texture=nil, itemLink=nil, itemLink=nil}
+local emptyItem = {texture=nil, itemLink=nil, itemLink=nil, empty=true}
 
 local options = {
     name = "MakeRoom",
@@ -28,7 +28,7 @@ function MakeRoom:OnInitialize()
 end
 
 function MakeRoom:OnEnable()
-    self:Print("v1.0.2 loaded")
+    self:Print("v1.0.3 loaded")
 end
 
 function MakeRoom:OnDisable()
@@ -80,15 +80,21 @@ function MakeRoom:MakeRoomPanel_OnHide(widget)
     self:UnregisterEvent("BAG_UPDATE");
 end
 
+function MakeRoom:DestroyItem(i)
+    MakeRoom:UnregisterEvent("BAG_UPDATE");
+    if i <= #greyItems and not greyItems[i].empty then
+        GameTooltip:Hide()
+        PickupContainerItem(greyItems[i].bag, greyItems[i].slot)
+        DeleteCursorItem()
+        greyItems[i].empty = true
+        MakeRoom:UpdateItem(i, emptyItem)
+    end
+    MakeRoom:RegisterEvent("BAG_UPDATE");
+end
+
 function MakeRoom:DestroyAllItems(self)
     for i = 1, 4, 1 do
-        if i <= #greyItems and not greyItems[i].empty then
-            PickupContainerItem(greyItems[i].bag, greyItems[i].slot)
-            DeleteCursorItem()
-            greyItems[i].empty = true
-            MakeRoom:UpdateItem(i, {texture=nil, itemLink=nil, itemLink=nil})
-            GameTooltip:Hide()
-        end
+        MakeRoom:DestroyItem(i)
     end
     MakeRoomPanel:Hide()
 end
@@ -99,11 +105,7 @@ function MakeRoom:OnClick(widget, button, ...)
             out(T["CURSOR_BUSY"])
         else
             local i = widget:GetID()
-            PickupContainerItem(greyItems[i].bag, greyItems[i].slot)
-            DeleteCursorItem()
-            greyItems[i].empty = true
-            MakeRoom:UpdateItem(i, {texture=nil, itemLink=nil, itemLink=nil})
-            GameTooltip:Hide()
+            MakeRoom:DestroyItem(i)
         end
     end
 end

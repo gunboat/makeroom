@@ -192,6 +192,12 @@
                 </Button>
             </Frames>
             <Scripts>
+                <OnHide>
+                    MakeRoom:MakeRoomPanel_OnHide(self)
+                </OnHide>
+                <OnShow>
+                    MakeRoom:MakeRoomPanel_OnShow(self)
+                </OnShow>
                 <OnLoad>
                     MakeRoom:MakeRoomPanel_OnLoad(self)
                 </OnLoad>

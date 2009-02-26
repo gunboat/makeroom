@@ -72,6 +72,14 @@ function MakeRoom:SlashCommand()
     end
 end
 
+function MakeRoom:MakeRoomPanel_OnShow(widget)
+    self:RegisterEvent("BAG_UPDATE");
+end
+
+function MakeRoom:MakeRoomPanel_OnHide(widget)
+    self:UnregisterEvent("BAG_UPDATE");
+end
+
 function MakeRoom:DestroyAllItems(self)
     for i = 1, 4, 1 do
         if i <= #greyItems and not greyItems[i].empty then
@@ -122,6 +130,12 @@ function MakeRoom:LOOT_CLOSED(event)
     end
 end
 
+function MakeRoom:BAG_UPDATE(event, bagId)
+    if MakeRoomPanel:IsVisible() then
+        MakeRoom:MakeRoom()
+    end
+end
+
 function MakeRoom:MakeRoom()
     greyItems = {}
     for bag = 0, 4, 1 do
@@ -146,13 +160,17 @@ function MakeRoom:MakeRoom()
         out(T["NO_GREY_ITEMS"])
     else
         table.sort(greyItems, function(arg1, arg2)      return arg1.total < arg2.total end)
-        
-        for i = 1, 4, 1 do
-            if greyItems[i] then
-                MakeRoom:UpdateItem(i, greyItems[i])
-            else
-                MakeRoom:UpdateItem(i, emptyItem)
-            end
+    end
+
+    for i = #greyItems+1, 4, 1 do
+        table.insert(greyItems, emptyItem)
+    end
+
+    for i = 1, 4, 1 do
+        if not greyItems[i].empty then
+            MakeRoom:UpdateItem(i, greyItems[i])
+        else
+            MakeRoom:UpdateItem(i, emptyItem)
         end
     end
 end

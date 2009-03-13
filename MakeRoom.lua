@@ -9,6 +9,7 @@ local ItemPrice = LibStub("ItemPrice-1.1")
 local greyItems = {}
 local emptyItem = {texture=nil, itemLink=nil, itemLink=nil, empty=true}
 local db = nil
+local colors = {}
 
 local options = {
     name = "MakeRoom",
@@ -31,8 +32,17 @@ function MakeRoom:OnInitialize()
         db.char.itemQuality = 1
     end
 
+    MakeRoom:InitializeColors()
+
     -- Allow our frame to be closed with the Escape key
     tinsert(UISpecialFrames, "MakeRoomPanel")
+end
+
+function MakeRoom:InitializeColors()
+    for i = 0, 2 do
+        local _, _, _, hex = GetItemQualityColor(i)
+        colors[i] = hex..getglobal("ITEM_QUALITY"..i.."_DESC")
+    end
 end
 
 function MakeRoom:OnEnable()
@@ -87,16 +97,16 @@ function MakeRoom:Options_QualityDropdown_Initialize()
     local info = UIDropDownMenu_CreateInfo()
     local func = function(self) MakeRoom:Options_ChooseQuality(self) end
 
-    info.text = "Poor (grey)"
+    info.text = colors[0]
     info.func = func
     info.checked = nil
     UIDropDownMenu_AddButton(info)
 
-    info.text = "Common (white)"
+    info.text = colors[1]
     info.checked = nil
     UIDropDownMenu_AddButton(info)
 
-    info.text = "Uncommon (green)"
+    info.text = colors[2]
     info.checked = nil
     UIDropDownMenu_AddButton(info)
 end

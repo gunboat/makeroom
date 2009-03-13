@@ -155,6 +155,14 @@ function MakeRoom:OnClick(widget, button, ...)
     end
 end
 
+function MakeRoom:OnDragStart(widget, button, ...)
+    local i = widget:GetID()
+    if i <= #greyItems and not greyItems[i].empty then
+        GameTooltip:Hide()
+        PickupContainerItem(greyItems[i].bag, greyItems[i].slot)
+    end
+end
+
 function MakeRoom:OnEnter(widget)
     local i = widget:GetID()
     if i <= # greyItems and not greyItems[i].empty then

@@ -51,8 +51,12 @@
                 </Layer>
             </Layers>
             <Scripts>
-                <OnLoad>self:RegisterForClicks("LeftButtonUp", "RightButtonUp")</OnLoad>
+                <OnLoad>
+                    self:RegisterForClicks("LeftButtonUp", "RightButtonUp")
+                    self:RegisterForDrag("LeftButton")
+                </OnLoad>
                 <OnClick>MakeRoom:OnClick(self, button)</OnClick>
+                <OnDragStart>MakeRoom:OnDragStart(self, button)</OnDragStart>
                 <OnEnter>MakeRoom:OnEnter(self)</OnEnter>
                 <OnLeave>GameTooltip:Hide() </OnLeave>
             </Scripts>

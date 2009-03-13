@@ -8,6 +8,7 @@ local T = LibStub("AceLocale-3.0"):GetLocale("MakeRoom", false)
 local ItemPrice = LibStub("ItemPrice-1.1")
 local greyItems = {}
 local emptyItem = {texture=nil, itemLink=nil, itemLink=nil, empty=true}
+local db = nil
 
 local options = {
     name = "MakeRoom",
@@ -22,6 +23,13 @@ function MakeRoom:OnInitialize()
     self:RegisterChatCommand("mr", "SlashCommand")
     self:RegisterEvent("UI_ERROR_MESSAGE")
     self:RegisterEvent("LOOT_CLOSED")
+
+    db = LibStub("AceDB-3.0"):New("MakeRoomDB")
+
+    if (not db.char.itemQuality)
+            or (db.char.itemQuality < 1 or db.char.itemQuality > 3) then
+        db.char.itemQuality = 1
+    end
 
     -- Allow our frame to be closed with the Escape key
     tinsert(UISpecialFrames, "MakeRoomPanel")
@@ -63,6 +71,43 @@ function MakeRoom:MakeRoomPanel_OnEvent(self, event, ...)
         HideUIPanel(self)
         return
     end
+end
+
+function MakeRoom:Options_OnShow(widget)
+    MakeRoom:Options_QualityDropdown_Update()
+end
+
+function MakeRoom:Options_ChooseQuality(self)
+    db.char.itemQuality = self:GetID()
+    UIDropDownMenu_ClearAll(MakeRoomOptionsPanelQualityDropdown)
+    UIDropDownMenu_SetSelectedID(MakeRoomOptionsPanelQualityDropdown, db.char.itemQuality)
+end
+
+function MakeRoom:Options_QualityDropdown_Initialize()
+    local info = UIDropDownMenu_CreateInfo()
+    local func = function(self) MakeRoom:Options_ChooseQuality(self) end
+
+    info.text = "Poor (grey)"
+    info.func = func
+    info.checked = nil
+    UIDropDownMenu_AddButton(info)
+
+    info.text = "Common (white)"
+    info.checked = nil
+    UIDropDownMenu_AddButton(info)
+
+    info.text = "Uncommon (green)"
+    info.checked = nil
+    UIDropDownMenu_AddButton(info)
+end
+
+function MakeRoom:Options_QualityDropdown_Update()
+    local func = function() MakeRoom:Options_QualityDropdown_Initialize() end
+    UIDropDownMenu_Initialize(MakeRoomOptionsPanelQualityDropdown, func)
+    UIDropDownMenu_SetWidth(MakeRoomOptionsPanelQualityDropdown, 130)
+
+    UIDropDownMenu_ClearAll(MakeRoomOptionsPanelQualityDropdown)
+    UIDropDownMenu_SetSelectedID(MakeRoomOptionsPanelQualityDropdown, db.char.itemQuality)
 end
 
 function MakeRoom:SlashCommand()
@@ -143,16 +188,19 @@ function MakeRoom:MakeRoom()
     for bag = 0, 4, 1 do
         for slot = 1, GetContainerNumSlots(bag), 1 do
             local itemLink = GetContainerItemLink(bag, slot)
-            local texture, itemCount = GetContainerItemInfo(bag, slot)
-            if itemLink and string.find(itemLink, "ff9d9d9d") then
-                local found, _, itemString = string.find(itemLink, "^|c%x+|H(.+)|h%[.+%]")
-                local _, itemId = strsplit(":", itemString)
-                itemId = tonumber(itemId)
+            if itemLink then
+                local texture, itemCount, locked, quality, readable = GetContainerItemInfo(bag, slot)
+                local itemName, _, itemRarity = GetItemInfo(itemLink)
+                if itemRarity <= (db.char.itemQuality-1) then
+                    local found, _, itemString = string.find(itemLink, "^|c%x+|H(.+)|h%[.+%]")
+                    local _, itemId = strsplit(":", itemString)
+                    itemId = tonumber(itemId)
                 
-                local valuePer = MakeRoom:GetVendorSellPrice(itemId)
-                if valuePer then
-                    local total = valuePer * itemCount
-                    table.insert(greyItems, {itemLink=itemLink, texture=texture, bag=bag, slot=slot, itemCount=itemCount, total=total})
+                    local valuePer = MakeRoom:GetVendorSellPrice(itemId)
+                    if valuePer and valuePer > 0 then
+                        local total = valuePer * itemCount
+                        table.insert(greyItems, {itemLink=itemLink, texture=texture, bag=bag, slot=slot, itemCount=itemCount, total=total})
+                    end
                 end
             end
         end
@@ -194,4 +242,11 @@ function MakeRoom:GetVendorSellPrice(itemId)
 
     -- Unsalable and unknown items are both ignored
     return nil
+end
+
+function MakeRoom:Options_OnLoad(panel)
+    panel.name = "MakeRoom"
+    panel.default = function(this) self:Print("default pressed") end
+
+    InterfaceOptions_AddCategory(panel)
 end

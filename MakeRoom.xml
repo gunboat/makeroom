@@ -8,6 +8,7 @@
 	<Include file="lib\CallbackHandler-1.0\CallbackHandler-1.0.xml" />
 	<Include file="lib\AceEvent-3.0\AceEvent-3.0.xml" />
 	<Include file="lib\AceLocale-3.0\AceLocale-3.0.xml" />
+	<Include file="lib\AceDB-3.0\AceDB-3.0.xml" />
 	<Include file="lib\ItemPrice-1.1\lib.xml" />
 	
 	<Script file="MakeRoom_enUS.lua"/>
@@ -208,4 +209,54 @@
             </Scripts>
         </Frame>
 	
+    <Frame name="MakeRoomOptionsPanel" hidden="true">
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString inherits="GameFontNormalLarge" text="MakeRoom">
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset>
+                                <AbsDimension x="15" y="-15" />
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+
+        <Frames>
+            <Frame name="$parentQualityDropdown" inherits="UIDropDownMenuTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="0" y="-80" />
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <FontString inherits="GameFontNormalSmall" text="Item Quality">
+                            <Anchors>
+                                <Anchor point="TOPLEFT">
+                                    <Offset>
+                                        <AbsDimension x="20" y="10"/>
+                                    </Offset>
+                                </Anchor>
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </Frame>
+        </Frames>
+
+        <Scripts>
+            <OnLoad>
+                MakeRoom:Options_OnLoad(self)
+            </OnLoad>
+            <OnShow>
+                MakeRoom:Options_OnShow(self)
+            </OnShow>
+        </Scripts>
+    </Frame>
+
 </Ui>

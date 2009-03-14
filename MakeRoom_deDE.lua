@@ -8,4 +8,5 @@ if L then
     L["MAKEROOM_WINDOW_TITLE"] = "MakeRoom"
     L["NO_GREY_ITEMS"] = "Keine grauen Items zum zerstören"
     L["TOOLTIP_INSTRUCTIONS"] = "Shift+Klick drücken zum zerstören"
+    L["WRONG_CONTAINER"] = "That item doesn't go in that container." -- Requires localization
 end

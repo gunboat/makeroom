@@ -184,7 +184,7 @@ function MakeRoom:OnEnter(widget)
 end
 
 function MakeRoom:UI_ERROR_MESSAGE(event, msg)
-    if msg == T["INVENTORY_IS_FULL"] then
+    if msg == T["INVENTORY_IS_FULL"] or msg == T["WRONG_CONTAINER"] then
         MakeRoom:SlashCommand()
     end
 end

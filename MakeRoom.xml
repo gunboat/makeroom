@@ -1,5 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\..\FrameUI\Frame.xsd" >
+	xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ../../FrameUI/Frame.xsd" >
 	
 	<!-- Embeds -->
 	<Script file="lib\LibStub\LibStub.lua"/>
@@ -17,6 +17,7 @@
 	<Script file="MakeRoom_deDE.lua"/>
 	<Script file="MakeRoom.lua"/>
 	
+        <!-- This is the item button in the "MakeRoom" window -->
         <Button name="ItemTemplate"
                 inherits="ItemButtonTemplate"
                 virtual="true">
@@ -62,46 +63,62 @@
             </Scripts>
         </Button>
 
+        <Button name="IgnoreButtonTemplate"
+                inherits="UIPanelButtonTemplate"
+                virtual="true"
+                text="IGNORE_BUTTON">
+            <Size>
+                <AbsDimension x="50" y="22"/>
+            </Size>
+            <Scripts>
+                <OnLoad>
+                    self:RegisterForClicks("LeftButtonUp")
+                </OnLoad>
+                <OnClick>MakeRoom:Ignore_AddOnClick(self, button)</OnClick>
+            </Scripts>
+        </Button>
+
+        <!-- The "MakeRoom" window itself -->
         <Frame name="MakeRoomPanel"
-               frameStrata="HIGH"
                toplevel="true"
-               moveable="true"
+               movable="true"
                enableMouse="true"
-               clampedToScreen="true"
                hidden="true"
                parent="UIParent">
             <Size>
-                <AbsDimension x="256" y="256"/>
+                <AbsDimension x="220" y="225"/>
             </Size>
             <Anchors>
                 <Anchor point="CENTER" />
             </Anchors>
-            <TitleRegion setAllPoints="true"/>
             <HitRectInsets>
-                <AbsInset left="0" right="70" top="0" bottom="0" />
+                <AbsInset left="5" right="5" top="5" bottom="5" />
             </HitRectInsets>
+            <TitleRegion setAllPoints="true"/>
+            <Backdrop edgeFile="Interface\DialogFrame\UI-DialogBox-Border"
+                      tile="true">
+                <EdgeSize>
+                    <AbsValue val="16"/>
+                </EdgeSize>
+                <TileSize>
+                    <AbsValue val="32"/>
+                </TileSize>
+                <BackgroundInsets>
+                    <AbsInset left="5" right="5" top="5" bottom="5"/>
+                </BackgroundInsets>
+            </Backdrop>
             <Layers>
                 <Layer level="BACKGROUND">
-                    <Texture name="MakeRoomPanelPortraitOverlay" file="Interface\TargetingFrame\TargetDead">
-                        <Size>
-                            <AbsDimension x="56" y="56"/>
-                        </Size>
-                        <Anchors>
-                            <Anchor point="TOPLEFT">
-                                <Offset>
-                                    <AbsDimension x="10" y="-8"/>
-                                </Offset>
-                            </Anchor>
-                        </Anchors>
+                    <Texture>
+                        <Color r="0" g="0" b="0" a="1"/>
                     </Texture>
                 </Layer>
                 <Layer level="ARTWORK">
-                    <Texture file="Interface\LootFrame\UI-LootPanel"/>
-                    <FontString name="$parent_Title" inherits="GameFontNormal" text="ITEMS">
+                    <FontString inherits="GameFontNormalLarge" text="MakeRoom">
                         <Anchors>
-                            <Anchor point="CENTER">
+                            <Anchor point="TOPLEFT">
                                 <Offset>
-                                    <AbsDimension x="-12" y="102"/>
+                                    <AbsDimension x="50" y="-10"/>
                                 </Offset>
                             </Anchor>
                         </Anchors>
@@ -114,9 +131,9 @@
                         <AbsDimension x="32" y="32"/>
                     </Size>
                     <Anchors>
-                        <Anchor point="CENTER" relativePoint="TOPRIGHT">
+                        <Anchor point="TOPRIGHT" relativePoint="TOPRIGHT">
                             <Offset>
-                                <AbsDimension x="-81" y="-26"/>
+                                <AbsDimension x="-6" y="-6"/>
                             </Offset>
                         </Anchor>
                     </Anchors>
@@ -136,9 +153,9 @@
                         <AbsDimension x="100" y="22" />
                     </Size>
                     <Anchors>
-                        <Anchor point="CENTER">
+                        <Anchor point="TOPLEFT">
                             <Offset>
-                                <AbsDimension x="0" y="70"/>
+                                <AbsDimension x="47" y="-27"/>
                             </Offset>
                         </Anchor>
                     </Anchors>
@@ -152,7 +169,20 @@
                     <Anchors>
                         <Anchor point="TOPLEFT">
                             <Offset>
-                                <AbsDimension x="24" y="-80"/>
+                                <AbsDimension x="10" y="-53"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </Button>
+                <Button name="$parent_Item1Ignore"
+                        inherits="IgnoreButtonTemplate"
+                        id="1">
+                    <Anchors>
+                        <Anchor point="TOPLEFT"
+                                relativeTo="$parent_Item1"
+                                relativePoint="TOPRIGHT">
+                            <Offset>
+                                <AbsDimension x="114" y="-5"/>
                             </Offset>
                         </Anchor>
                     </Anchors>
@@ -170,6 +200,19 @@
                         </Anchor>
                     </Anchors>
                 </Button>
+                <Button name="$parent_Item2Ignore"
+                        inherits="IgnoreButtonTemplate"
+                        id="2">
+                    <Anchors>
+                        <Anchor point="TOPLEFT"
+                                relativeTo="$parent_Item2"
+                                relativePoint="TOPRIGHT">
+                            <Offset>
+                                <AbsDimension x="114" y="-5"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </Button>
                 <Button name="$parent_Item3"
                         inherits="ItemTemplate"
                         id="3">
@@ -183,6 +226,19 @@
                         </Anchor>
                     </Anchors>
                 </Button>
+                <Button name="$parent_Item3Ignore"
+                        inherits="IgnoreButtonTemplate"
+                        id="3">
+                    <Anchors>
+                        <Anchor point="TOPLEFT"
+                                relativeTo="$parent_Item3"
+                                relativePoint="TOPRIGHT">
+                            <Offset>
+                                <AbsDimension x="114" y="-5"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </Button>
                 <Button name="$parent_Item4"
                         inherits="ItemTemplate"
                         id="4">
@@ -192,6 +248,19 @@
                                 relativePoint="BOTTOM">
                             <Offset>
                                 <AbsDimension x="0" y="-4"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </Button>
+                <Button name="$parent_Item4Ignore"
+                        inherits="IgnoreButtonTemplate"
+                        id="4">
+                    <Anchors>
+                        <Anchor point="TOPLEFT"
+                                relativeTo="$parent_Item4"
+                                relativePoint="TOPRIGHT">
+                            <Offset>
+                                <AbsDimension x="114" y="-5"/>
                             </Offset>
                         </Anchor>
                     </Anchors>
@@ -212,8 +281,61 @@
                 </OnEvent>
             </Scripts>
         </Frame>
+
+    <!-- This is the template for the rows in the "Ignore" list -->
+    <Button name="IgnoreItemTemplate"
+            inherits="UIPanelButtonTemplate"
+            virtual="true"
+            text="X">
+        <Size>
+            <AbsDimension x="22" y="22" />
+        </Size>
+        <Layers>
+            <Layer level="BORDER">
+                <Texture name="$parentTexture">
+                    <Size>
+                        <AbsDimension x="22" y="22" />
+                    </Size>
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset>
+                                <AbsDimension x="23" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </Texture>
+                <FontString name="$parentName" inherits="GameFontNormal" justifyH="LEFT">
+                    <Size>
+                        <AbsDimension x="221" y="22"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset>
+                                <AbsDimension x="47" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnLoad>
+                self:RegisterForClicks("LeftButtonUp")
+            </OnLoad>
+            <OnEnter>
+                MakeRoom:Ignore_ForgetOnEnter(self)
+            </OnEnter>
+            <OnLeave>
+                MakeRoom:Ignore_ForgetOnLeave(self)
+                </OnLeave>
+            <OnClick>
+                MakeRoom:Ignore_ForgetOnClick(self, button)
+            </OnClick>
+        </Scripts>
+    </Button>
 	
-    <Frame name="MakeRoomOptionsPanel" hidden="true">
+    <!-- The "MakeRoom options" tab in the Blizzard menu -->
+    <Frame name="MakeRoomOptionsPanel" hidden="true" enableMouse="true">
         <Layers>
             <Layer level="ARTWORK">
                 <FontString inherits="GameFontNormalLarge" text="MakeRoom">
@@ -225,32 +347,162 @@
                         </Anchor>
                     </Anchors>
                 </FontString>
+                <FontString name="$parentItemQuality" inherits="GameFontNormal" text="ITEM_QUALITY">
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset>
+                                <AbsDimension x="15" y="-66"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+                <FontString name="$parentIgnoreList" inherits="GameFontNormal" text="IGNORE_LIST">
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset>
+                                <AbsDimension x="15" y="-120" />
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
             </Layer>
         </Layers>
 
         <Frames>
-            <Frame name="$parentQualityDropdown" inherits="UIDropDownMenuTemplate">
+            <Frame name="$parentQualityDropdown"
+                   inherits="UIDropDownMenuTemplate">
                 <Anchors>
                     <Anchor point="TOPLEFT">
                         <Offset>
-                            <AbsDimension x="0" y="-80" />
+                            <AbsDimension x="-5" y="-80" />
                         </Offset>
                     </Anchor>
                 </Anchors>
-                <Layers>
-                    <Layer level="OVERLAY">
-                        <FontString inherits="GameFontNormalSmall" text="Item Quality">
-                            <Anchors>
-                                <Anchor point="TOPLEFT">
-                                    <Offset>
-                                        <AbsDimension x="20" y="10"/>
-                                    </Offset>
-                                </Anchor>
-                            </Anchors>
-                        </FontString>
-                    </Layer>
-                </Layers>
             </Frame>
+
+            <ScrollFrame name="$parentScrollbar"
+                         inherits="FauxScrollFrameTemplate">
+                <Size>
+                    <AbsDimension x="298" y="220"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="10" y="-134"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        MakeRoom:Ignore_OnLoad(self)
+                    </OnLoad>
+                    <OnVerticalScroll>
+                        local f = function()
+                                MakeRoom:Ignore_UpdateScrollbar()
+                            end
+                        FauxScrollFrame_OnVerticalScroll(self, offset, IGNORE_ITEM_HEIGHT, f)
+                    </OnVerticalScroll>
+                    <OnShow>
+                        MakeRoom:Ignore_OnShow(self)
+                    </OnShow>
+                    <OnHide>
+                        MakeRoom:Ignore_OnHide(self)
+                    </OnHide>
+                </Scripts>
+            </ScrollFrame>
+
+            <Button name="$parentIgnoreItem1"
+                    inherits="IgnoreItemTemplate"
+                    id="1">
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="15" y="-134" />
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+            </Button>
+            <Button name="$parentIgnoreItem2"
+                    inherits="IgnoreItemTemplate"
+                    id="2">
+                <Anchors>
+                    <Anchor point="TOP"
+                            relativePoint="BOTTOM"
+                            relativeTo="$parentIgnoreItem1" />
+                </Anchors>
+            </Button>
+            <Button name="$parentIgnoreItem3"
+                    inherits="IgnoreItemTemplate"
+                    id="3">
+                <Anchors>
+                    <Anchor point="TOP"
+                            relativePoint="BOTTOM"
+                            relativeTo="$parentIgnoreItem2" />
+                </Anchors>
+            </Button>
+            <Button name="$parentIgnoreItem4"
+                    inherits="IgnoreItemTemplate"
+                    id="4">
+                <Anchors>
+                    <Anchor point="TOP"
+                            relativePoint="BOTTOM"
+                            relativeTo="$parentIgnoreItem3" />
+                </Anchors>
+            </Button>
+            <Button name="$parentIgnoreItem5"
+                    inherits="IgnoreItemTemplate"
+                    id="5">
+                <Anchors>
+                    <Anchor point="TOP"
+                            relativePoint="BOTTOM"
+                            relativeTo="$parentIgnoreItem4" />
+                </Anchors>
+            </Button>
+            <Button name="$parentIgnoreItem6"
+                    inherits="IgnoreItemTemplate"
+                    id="6">
+                <Anchors>
+                    <Anchor point="TOP"
+                            relativePoint="BOTTOM"
+                            relativeTo="$parentIgnoreItem5" />
+                </Anchors>
+            </Button>
+            <Button name="$parentIgnoreItem7"
+                    inherits="IgnoreItemTemplate"
+                    id="7">
+                <Anchors>
+                    <Anchor point="TOP"
+                            relativePoint="BOTTOM"
+                            relativeTo="$parentIgnoreItem6" />
+                </Anchors>
+            </Button>
+            <Button name="$parentIgnoreItem8"
+                    inherits="IgnoreItemTemplate"
+                    id="8">
+                <Anchors>
+                    <Anchor point="TOP"
+                            relativePoint="BOTTOM"
+                            relativeTo="$parentIgnoreItem7" />
+                </Anchors>
+            </Button>
+            <Button name="$parentIgnoreItem9"
+                    inherits="IgnoreItemTemplate"
+                    id="9">
+                <Anchors>
+                    <Anchor point="TOP"
+                            relativePoint="BOTTOM"
+                            relativeTo="$parentIgnoreItem8" />
+                </Anchors>
+            </Button>
+            <Button name="$parentIgnoreItem10"
+                    inherits="IgnoreItemTemplate"
+                    id="10">
+                <Anchors>
+                    <Anchor point="TOP"
+                            relativePoint="BOTTOM"
+                            relativeTo="$parentIgnoreItem9" />
+                </Anchors>
+            </Button>
         </Frames>
 
         <Scripts>

@@ -1,3 +1,4 @@
+
 function out(msg)
     DEFAULT_CHAT_FRAME:AddMessage(msg)
     UIErrorsFrame:AddMessage(msg, 1.0, 0.5, 0, 1, 10)
@@ -9,7 +10,11 @@ local ItemPrice = LibStub("ItemPrice-1.1")
 local greyItems = {}
 local emptyItem = {texture=nil, itemLink=nil, itemLink=nil, empty=true}
 local db = nil
+local ignoreItemsDisplayable = {}
 local colors = {}
+
+IGNORE_ITEMS_TO_SHOW = 10
+IGNORE_ITEM_HEIGHT = 22
 
 local options = {
     name = "MakeRoom",
@@ -17,6 +22,16 @@ local options = {
     type = 'group',
     args = { },
 }
+
+function MakeRoom:GetItemInfo(bag, slot)
+    local info = {}
+    info.itemLink = GetContainerItemLink(bag, slot)
+    if info.itemLink then
+        info.texture, info.count = GetContainerItemInfo(bag, slot)
+        info.name, _, info.quality = GetItemInfo(info.itemLink)
+    end
+    return info
+end
 
 function MakeRoom:OnInitialize()
     LibStub("AceConfig-3.0"):RegisterOptionsTable("MakeRoom", options)
@@ -30,6 +45,10 @@ function MakeRoom:OnInitialize()
     if (not db.char.itemQuality)
             or (db.char.itemQuality < 1 or db.char.itemQuality > 3) then
         db.char.itemQuality = 1
+    end
+
+    if (not db.char.ignoreItems) then
+        db.char.ignoreItems = {}
     end
 
     MakeRoom:InitializeColors()
@@ -46,7 +65,7 @@ function MakeRoom:InitializeColors()
 end
 
 function MakeRoom:OnEnable()
-    self:Print("v1.0.3 loaded")
+    self:Print("v1.2.0 loaded")
 end
 
 function MakeRoom:OnDisable()
@@ -72,8 +91,10 @@ end
 function MakeRoom:MakeRoomPanel_OnLoad(self)
     self:RegisterEvent("LOOT_CLOSED")
 
-    MakeRoomPanel_Title:SetText(T["MAKEROOM_WINDOW_TITLE"])
     MakeRoomPanel_DestroyAll:SetText(T["DESTROY_ALL"])
+    for i = 1, 4 do
+        getglobal("MakeRoomPanel_Item"..i.."Ignore"):SetText(T["IGNORE_BUTTON"])
+    end
 end
 
 function MakeRoom:MakeRoomPanel_OnEvent(self, event, ...)
@@ -118,6 +139,72 @@ function MakeRoom:Options_QualityDropdown_Update()
 
     UIDropDownMenu_ClearAll(MakeRoomOptionsPanelQualityDropdown)
     UIDropDownMenu_SetSelectedID(MakeRoomOptionsPanelQualityDropdown, db.char.itemQuality)
+end
+
+function MakeRoom:Ignore_OnLoad(widget)
+    FauxScrollFrame_SetOffset(MakeRoomOptionsPanelScrollbar, 0)
+end
+
+function MakeRoom:Ignore_ForgetOnEnter(widget)
+    GameTooltip:SetOwner(widget, "ANCHOR_RIGHT")
+    GameTooltip:AddLine("Click to remove this item from the Ignore list")
+    GameTooltip:Show()
+end
+
+function MakeRoom:Ignore_ForgetOnLeave(widget)
+    GameTooltip:Hide()
+end
+
+function MakeRoom:Ignore_AddOnClick(widget, button)
+    local row = widget:GetID()
+    local info = MakeRoom:GetItemInfo(greyItems[row].bag, greyItems[row].slot)
+    db.char.ignoreItems[info.itemLink] = info
+    MakeRoom:Ignore_RebuildDisplayList()
+    MakeRoom:Ignore_UpdateScrollbar()
+    MakeRoom:MakeRoom()
+end
+
+function MakeRoom:Ignore_ForgetOnClick(widget, button)
+    local row = widget:GetID() + FauxScrollFrame_GetOffset(MakeRoomOptionsPanelScrollbar)
+    db.char.ignoreItems[ignoreItemsDisplayable[row].itemLink] = nil
+    MakeRoom:Ignore_RebuildDisplayList()
+    MakeRoom:Ignore_UpdateScrollbar()
+end
+
+function MakeRoom:Ignore_OnShow(widget)
+    MakeRoom:Ignore_RebuildDisplayList()
+    MakeRoom:Ignore_UpdateScrollbar()
+end
+
+function MakeRoom:Ignore_RebuildDisplayList()
+    ignoreItemsDisplayable = {}
+    for key,val in pairs(db.char.ignoreItems) do
+        table.insert(ignoreItemsDisplayable, val)
+    end
+    table.sort(ignoreItemsDisplayable, function(arg1, arg2) return arg1.name < arg2.name end)
+end
+
+function MakeRoom:Ignore_OnHide(widget)
+end
+
+function MakeRoom:Ignore_UpdateScrollbar()
+    local offset = FauxScrollFrame_GetOffset(MakeRoomOptionsPanelScrollbar)
+
+    for n = 1, IGNORE_ITEMS_TO_SHOW do
+        local i = n+offset
+        local stem = "MakeRoomOptionsPanelIgnoreItem" .. n
+        if i <= #ignoreItemsDisplayable then
+            getglobal(stem.."Name"):SetText(ITEM_QUALITY_COLORS[ignoreItemsDisplayable[i].quality].hex..ignoreItemsDisplayable[i].name)
+            getglobal(stem.."Texture"):SetTexture(ignoreItemsDisplayable[i].texture)
+            getglobal(stem):Show()
+        else
+            getglobal(stem.."Name"):SetText(nil)
+            getglobal(stem.."Texture"):SetTexture(nil)
+            getglobal(stem):Hide()
+        end
+    end
+
+    FauxScrollFrame_Update(MakeRoomOptionsPanelScrollbar, #ignoreItemsDisplayable, IGNORE_ITEMS_TO_SHOW, IGNORE_ITEM_HEIGHT)
 end
 
 function MakeRoom:SlashCommand()
@@ -207,24 +294,26 @@ function MakeRoom:MakeRoom()
         for slot = 1, GetContainerNumSlots(bag), 1 do
             local itemLink = GetContainerItemLink(bag, slot)
             if itemLink then
-                local texture, itemCount, locked, quality, readable = GetContainerItemInfo(bag, slot)
-                local itemName, _, itemRarity = GetItemInfo(itemLink)
-                if itemRarity <= (db.char.itemQuality-1) then
-                    local found, _, itemString = string.find(itemLink, "^|c%x+|H(.+)|h%[.+%]")
-                    local _, itemId = strsplit(":", itemString)
-                    itemId = tonumber(itemId)
-                
-                    local valuePer = MakeRoom:GetVendorSellPrice(itemId)
-                    if valuePer and valuePer > 0 then
-                        local total = valuePer * itemCount
-                        table.insert(greyItems, {itemLink=itemLink, texture=texture, bag=bag, slot=slot, itemCount=itemCount, total=total})
+                if not db.char.ignoreItems[itemLink] then
+                    local texture, itemCount, locked, quality, readable = GetContainerItemInfo(bag, slot)
+                    local itemName, _, itemRarity = GetItemInfo(itemLink)
+                    if itemRarity <= (db.char.itemQuality-1) then
+                        local found, _, itemString = string.find(itemLink, "^|c%x+|H(.+)|h%[.+%]")
+                        local _, itemId = strsplit(":", itemString)
+                        itemId = tonumber(itemId)
+                    
+                        local valuePer = MakeRoom:GetVendorSellPrice(itemId)
+                        if valuePer and valuePer > 0 then
+                            local total = valuePer * itemCount
+                            table.insert(greyItems, {itemLink=itemLink, texture=texture, bag=bag, slot=slot, itemCount=itemCount, total=total})
+                        end
                     end
                 end
             end
         end
     end
     
-    if # greyItems == 0 then
+    if #greyItems == 0 then
         out(T["NO_GREY_ITEMS"])
     else
         table.sort(greyItems, function(arg1, arg2)      return arg1.total < arg2.total end)
@@ -265,6 +354,9 @@ end
 function MakeRoom:Options_OnLoad(panel)
     panel.name = "MakeRoom"
     panel.default = function(this) self:Print("default pressed") end
+    
+    MakeRoomOptionsPanelItemQuality:SetText(T["ITEM_QUALITY"])
+    MakeRoomOptionsPanelIgnoreList:SetText(T["IGNORE_LIST"])
 
     InterfaceOptions_AddCategory(panel)
 end

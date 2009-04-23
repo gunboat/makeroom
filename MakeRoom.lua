@@ -55,6 +55,23 @@ function MakeRoom:OnInitialize()
 
     -- Allow our frame to be closed with the Escape key
     tinsert(UISpecialFrames, "MakeRoomPanel")
+
+    LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject("MakeRoom", {
+        launcher = true,
+        icon = "Interface\\Icons\\INV_Misc_Bag_08",
+        OnClick = function(...) MakeRoom:Launcher_OnClick(...) end
+    })
+end
+
+function MakeRoom:Launcher_OnClick(self, button)
+    if btn == "RightButton" then
+        InterfaceOptionsFrame_OpenToFrame(MakeRoomOptionsPanel)
+    else
+        MakeRoom:MakeRoom()
+        if not MakeRoomPanel:IsVisible() then
+            MakeRoomPanel:Show()
+        end
+    end
 end
 
 function MakeRoom:InitializeColors()

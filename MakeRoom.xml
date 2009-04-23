@@ -10,6 +10,7 @@
 	<Include file="lib\AceLocale-3.0\AceLocale-3.0.xml" />
 	<Include file="lib\AceDB-3.0\AceDB-3.0.xml" />
 	<Include file="lib\ItemPrice-1.1\lib.xml" />
+	<Script file="lib\LibDataBroker-1.1\LibDataBroker-1.1.lua" />
 	
 	<Script file="MakeRoom_enUS.lua"/>
 	<Script file="MakeRoom_esMX.lua"/>

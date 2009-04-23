@@ -8,6 +8,8 @@ if L then
     L["IGNORE_LIST"] = "Ignore list"
     L["INVENTORY_IS_FULL"] = "Inventory is full."
     L["ITEM_QUALITY"] = "Item quality"
+    L["LDB_CLICK_TO_CONFIGURE"] = "Right-click|r to open the configuration menu"
+    L["LDB_CLICK_TO_LAUNCH"] = "Click|r to find cheap items."
     L["MAKEROOM_WINDOW_TITLE"] = "MakeRoom"
     L["NO_GREY_ITEMS"] = "No grey items to destroy."
     L["TOOLTIP_INSTRUCTIONS"] = "shift-click to destroy"

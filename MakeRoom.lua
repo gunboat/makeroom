@@ -59,19 +59,23 @@ function MakeRoom:OnInitialize()
     LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject("MakeRoom", {
         launcher = true,
         icon = "Interface\\Icons\\INV_Misc_Bag_08",
-        OnClick = function(...) MakeRoom:Launcher_OnClick(...) end
-    })
-end
-
-function MakeRoom:Launcher_OnClick(self, button)
-    if btn == "RightButton" then
-        InterfaceOptionsFrame_OpenToFrame(MakeRoomOptionsPanel)
-    else
-        MakeRoom:MakeRoom()
-        if not MakeRoomPanel:IsVisible() then
-            MakeRoomPanel:Show()
+        text = "MakeRoom",
+        OnClick = function(frame, button)
+            if button == "RightButton" then
+                InterfaceOptionsFrame_OpenToCategory(MakeRoomOptionsPanel)
+            else
+                MakeRoom:MakeRoom()
+                if not MakeRoomPanel:IsVisible() then
+                    MakeRoomPanel:Show()
+                end
+            end
+        end,
+        OnTooltipShow = function(tooltip)
+            tooltip:AddLine("MakeRoom |cff00ff00(v1.2.1)|r");
+            tooltip:AddLine("|cffffff00"..T["LDB_CLICK_TO_LAUNCH"])
+            tooltip:AddLine("|cffffff00"..T["LDB_CLICK_TO_CONFIGURE"])
         end
-    end
+    })
 end
 
 function MakeRoom:InitializeColors()

@@ -12,6 +12,7 @@ local emptyItem = {texture=nil, itemLink=nil, itemLink=nil, empty=true}
 local db = nil
 local ignoreItemsDisplayable = {}
 local colors = {}
+local version = "1.2.2"
 
 IGNORE_ITEMS_TO_SHOW = 10
 IGNORE_ITEM_HEIGHT = 22
@@ -86,7 +87,7 @@ function MakeRoom:InitializeColors()
 end
 
 function MakeRoom:OnEnable()
-    self:Print("v1.2.0 loaded")
+    self:Print("v"..version.." loaded")
 end
 
 function MakeRoom:OnDisable()

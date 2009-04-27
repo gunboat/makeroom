@@ -1,23 +1,20 @@
 externals:
     lib/LibStub:
         url: svn://svn.wowace.com/wow/libstub/mainline/tags/1.0
-    lib/AceAddon-3.0:
-        url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceAddon-3.0
+    lib/CallbackHandler-1.0:
+        url: svn://svn.wowace.com/wow/ace3/mainline/trunk/CallbackHandler-1.0
         tag: latest
-    lib/AceBucket-3.0:
-        url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceBucket-3.0
-        tag: latest
-    lib/AceTimer-3.0:
-        url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceTimer-3.0
-        tag: latest
-    lib/AceConfig-3.0:
-        url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceConfig-3.0
+    lib/AceGUI-3.0:
+        url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceGUI-3.0
         tag: latest
     lib/AceConsole-3.0:
         url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceConsole-3.0
         tag: latest
-    lib/AceDB-3.0:
-        url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceDB-3.0
+    lib/AceConfig-3.0:
+        url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceConfig-3.0
+        tag: latest
+    lib/AceAddon-3.0:
+        url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceAddon-3.0
         tag: latest
     lib/AceEvent-3.0:
         url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceEvent-3.0
@@ -25,8 +22,14 @@ externals:
     lib/AceLocale-3.0:
         url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceLocale-3.0
         tag: latest
-    lib/CallbackHandler-1.0:
-        url: svn://svn.wowace.com/wow/ace3/mainline/trunk/CallbackHandler-1.0
+    lib/AceDB-3.0:
+        url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceDB-3.0
+        tag: latest
+    lib/AceTimer-3.0:
+        url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceTimer-3.0
+        tag: latest
+    lib/AceBucket-3.0:
+        url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceBucket-3.0
         tag: latest
     lib/ItemPrice-1.1:
         url: svn://svn.wowace.com/wow/itemprice-1-1/mainline/trunk

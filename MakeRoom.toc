@@ -4,7 +4,7 @@
 ## Author: Mitchell Morris
 ## eMail: mitchell@morrisland.com
 ## URL: http://wow.curse.com/downloads/wow-addons/details/makeroom.aspx
-## Version: 1.2.2
+## Version: 1.2.3
 ## SavedVariables: MakeRoomDB
 ## OptionalDeps: Ace3, ItemPrice, Informant
 ## X-Embeds: AceAddon-3.0, AceConsole-3.0, AceDB-3.0, AceEvent-3.0, AceLocale-3.0, CallbackHandler-1.0, ItemPrice-1.1, LibStub

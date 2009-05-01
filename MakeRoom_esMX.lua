@@ -1,7 +1,8 @@
 local AL3 = LibStub("AceLocale-3.0")
 local L = AL3:NewLocale("MakeRoom", "esMX", false)
 
-if L then
+if not L then return end
+
 L["CURSOR_BUSY"] = "Ya estas sosteniendo algo"
 L["DESTROY_ALL"] = "Destruir todos"
 L["IGNORE_BUTTON"] = "Ignore" -- Requires localization
@@ -15,4 +16,3 @@ L["NO_GREY_ITEMS"] = "No hay objetos grices para destruir."
 L["TOOLTIP_INSTRUCTIONS"] = "Shift-Click para destruir."
 L["WRONG_CONTAINER"] = "That item doesn't go in that container." -- Requires localization
 
-end

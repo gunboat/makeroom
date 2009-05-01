@@ -12,7 +12,7 @@ local emptyItem = {texture=nil, itemLink=nil, itemLink=nil, empty=true}
 local db = nil
 local ignoreItemsDisplayable = {}
 local colors = {}
-local version = "1.2.3"
+local version = "1.2.4"
 
 IGNORE_ITEMS_TO_SHOW = 10
 IGNORE_ITEM_HEIGHT = 22

@@ -8,7 +8,7 @@ MakeRoom = LibStub("AceAddon-3.0"):NewAddon("MakeRoom", "AceConsole-3.0", "AceEv
 local T = LibStub("AceLocale-3.0"):GetLocale("MakeRoom", false)
 local ItemPrice = LibStub("ItemPrice-1.1")
 local greyItems = {}
-local emptyItem = {texture=nil, itemLink=nil, itemLink=nil, empty=true}
+local emptyItem = {texture=nil, itemLink=nil, itemId=nil, empty=true}
 local db = nil
 local ignoreItemsDisplayable = {}
 local colors = {}
@@ -72,7 +72,7 @@ function MakeRoom:OnInitialize()
             end
         end,
         OnTooltipShow = function(tooltip)
-            tooltip:AddLine("MakeRoom |cff00ff00(v1.2.1)|r");
+            tooltip:AddLine("MakeRoom |cff00ff00(v"..version..")|r");
             tooltip:AddLine("|cffffff00"..T["LDB_CLICK_TO_LAUNCH"])
             tooltip:AddLine("|cffffff00"..T["LDB_CLICK_TO_CONFIGURE"])
         end
@@ -99,6 +99,12 @@ function MakeRoom:UpdateItem(slot, itemDescription)
     MakeRoom:SetItemCount(
         getglobal("MakeRoomPanel_Item" .. slot .. "Count"),
         itemDescription.itemCount)
+
+    local isChecked = false
+    if itemDescription.texture then
+        isChecked = true
+    end
+    getglobal("MakeRoomPanel_Item"..slot.."Checked"):SetChecked(isChecked)
 end
 
 function MakeRoom:SetItemCount(widget, itemCount)
@@ -247,11 +253,14 @@ end
 function MakeRoom:DestroyItem(i)
     MakeRoom:UnregisterEvent("BAG_UPDATE");
     if i <= #greyItems and not greyItems[i].empty then
-        GameTooltip:Hide()
-        PickupContainerItem(greyItems[i].bag, greyItems[i].slot)
-        DeleteCursorItem()
-        greyItems[i].empty = true
-        MakeRoom:UpdateItem(i, emptyItem)
+        local isChecked = getglobal("MakeRoomPanel_Item"..i.."Checked"):GetChecked()
+        if isChecked then
+            GameTooltip:Hide()
+            PickupContainerItem(greyItems[i].bag, greyItems[i].slot)
+            DeleteCursorItem()
+            greyItems[i].empty = true
+            MakeRoom:UpdateItem(i, emptyItem)
+        end
     end
     MakeRoom:RegisterEvent("BAG_UPDATE");
 end
@@ -286,7 +295,7 @@ function MakeRoom:OnEnter(widget)
     local i = widget:GetID()
     if i <= # greyItems and not greyItems[i].empty then
         GameTooltip:SetOwner(widget, "ANCHOR_RIGHT")
-        GameTooltip:SetBagItem(greyItems[i].bag, greyItems[i].slot)
+        GameTooltip:SetHyperlink(greyItems[i].itemLink)
         GameTooltip:AddLine(T["TOOLTIP_INSTRUCTIONS"])
         GameTooltip:Show()
     end
@@ -327,7 +336,7 @@ function MakeRoom:MakeRoom()
                         local valuePer = MakeRoom:GetVendorSellPrice(itemId)
                         if valuePer and valuePer > 0 then
                             local total = valuePer * itemCount
-                            table.insert(greyItems, {itemLink=itemLink, texture=texture, bag=bag, slot=slot, itemCount=itemCount, total=total})
+                            table.insert(greyItems, {itemLink=itemLink, itemId=itemId, texture=texture, bag=bag, slot=slot, itemCount=itemCount, total=total})
                         end
                     end
                 end

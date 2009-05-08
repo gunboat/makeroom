@@ -15,4 +15,3 @@ L["MAKEROOM_WINDOW_TITLE"] = "MakeRoom"
 L["NO_GREY_ITEMS"] = "No hay objetos grices para destruir."
 L["TOOLTIP_INSTRUCTIONS"] = "Shift-Click para destruir."
 L["WRONG_CONTAINER"] = "That item doesn't go in that container." -- Requires localization
-

@@ -91,7 +91,7 @@
                hidden="true"
                parent="UIParent">
             <Size>
-                <AbsDimension x="220" y="225"/>
+                <AbsDimension x="240" y="225"/>
             </Size>
             <Anchors>
                 <Anchor point="CENTER" />
@@ -121,9 +121,9 @@
                 <Layer level="ARTWORK">
                     <FontString inherits="GameFontNormalLarge" text="MakeRoom">
                         <Anchors>
-                            <Anchor point="TOPLEFT">
+                            <Anchor point="TOP">
                                 <Offset>
-                                    <AbsDimension x="50" y="-10"/>
+                                    <AbsDimension x="0" y="-10"/>
                                 </Offset>
                             </Anchor>
                         </Anchors>
@@ -155,12 +155,12 @@
                         inherits="UIPanelButtonTemplate"
                         text="DESTROY_ALL">
                     <Size>
-                        <AbsDimension x="100" y="22" />
+                        <AbsDimension x="130" y="22" />
                     </Size>
                     <Anchors>
-                        <Anchor point="TOPLEFT">
+                        <Anchor point="TOP">
                             <Offset>
-                                <AbsDimension x="47" y="-27"/>
+                                <AbsDimension x="0" y="-27"/>
                             </Offset>
                         </Anchor>
                     </Anchors>
@@ -174,7 +174,7 @@
                     <Anchors>
                         <Anchor point="TOPLEFT">
                             <Offset>
-                                <AbsDimension x="10" y="-53"/>
+                                <AbsDimension x="30" y="-53"/>
                             </Offset>
                         </Anchor>
                     </Anchors>
@@ -270,6 +270,54 @@
                         </Anchor>
                     </Anchors>
                 </Button>
+                <CheckButton name="$parent_Item1Checked"
+                             inherits="InterfaceOptionsSmallCheckButtonTemplate"
+                             id="1">
+                    <Anchors>
+                        <Anchor point="TOPLEFT"
+                                relativeTo="$parent_Item1">
+                            <Offset>
+                                <AbsDimension x="-25" y="-5"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </CheckButton>
+                <CheckButton name="$parent_Item2Checked"
+                             inherits="InterfaceOptionsSmallCheckButtonTemplate"
+                             id="2">
+                    <Anchors>
+                        <Anchor point="TOPLEFT"
+                                relativeTo="$parent_Item2">
+                            <Offset>
+                                <AbsDimension x="-25" y="-5"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </CheckButton>
+                <CheckButton name="$parent_Item3Checked"
+                             inherits="InterfaceOptionsSmallCheckButtonTemplate"
+                             id="3">
+                    <Anchors>
+                        <Anchor point="TOPLEFT"
+                                relativeTo="$parent_Item3">
+                            <Offset>
+                                <AbsDimension x="-25" y="-5"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </CheckButton>
+                <CheckButton name="$parent_Item4Checked"
+                             inherits="InterfaceOptionsSmallCheckButtonTemplate"
+                             id="4">
+                    <Anchors>
+                        <Anchor point="TOPLEFT"
+                                relativeTo="$parent_Item4">
+                            <Offset>
+                                <AbsDimension x="-25" y="-5"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </CheckButton>
             </Frames>
             <Scripts>
                 <OnHide>
